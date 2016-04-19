@@ -1,5 +1,9 @@
 package com.gldraphael.appstatedemo;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 
@@ -52,5 +56,40 @@ public class AppState {
         }
     }
 
+    /**
+     * Saves the AppState data in SharedPreferences
+     * @param context
+     * @return Returns true if success, else returns false
+     */
+    public boolean commit(Context context) {
+        try {
+            String serializedString = serialize();
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("MYPREFERENCENAME", serializedString); // TODO: convert preference name to a static final field
+            return editor.commit();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    /**
+     * Restores the AppState data from SharedPreferences
+     * @param context
+     */
+    public void restore(Context context) {
+        String prefString = PreferenceManager.getDefaultSharedPreferences(context).getString("MYPREFERENCENAME", "");  // TODO: convert preference name to a static final field
+        AppState as = deserialize(prefString);
+        if (as != null) {
+            this.milk = as.milk;
+            this.laundry = as.laundry;
+            this.bed = as.bed;
+            this.description = as.description;
+            // Assign additional state variables here
+        } /*else {
+            // TODO: handle this
+        }*/
+    }
 
 }
