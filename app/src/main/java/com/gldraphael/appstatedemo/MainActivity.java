@@ -21,5 +21,25 @@ public class MainActivity extends AppCompatActivity {
         cbxMilk = (CheckBox) findViewById(R.id.cbxMilk);
         cbxLaundry = (CheckBox) findViewById(R.id.cbxLaundry);
         cbxBed = (CheckBox) findViewById(R.id.cbxBed);
+
+        AppState.getInstance().restore(this); // Make sure this is called when the app is started,
+                                              // before you access the AppState fields
+
+        txtDescription.setText(AppState.getInstance().description);
+        cbxMilk.setChecked(AppState.getInstance().milk);
+        cbxLaundry.setChecked(AppState.getInstance().laundry);
+        cbxBed.setChecked(AppState.getInstance().bed);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        AppState.getInstance().description = txtDescription.getText().toString();
+        AppState.getInstance().milk = cbxMilk.isChecked();
+        AppState.getInstance().laundry = cbxLaundry.isChecked();
+        AppState.getInstance().bed = cbxBed.isChecked();
+
+        AppState.getInstance().commit(getApplicationContext());
     }
 }
