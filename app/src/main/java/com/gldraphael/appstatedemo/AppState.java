@@ -18,4 +18,8 @@ public class AppState {
     }
 
     // State variables follows
+    public boolean milk;
+    public boolean laundry;
+    public boolean bed;
+    public String description;
 }
